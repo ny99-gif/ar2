@@ -1,11 +1,36 @@
+<!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image-aframe.prod.js"></script>
+    <title>Seasonal AR Exhibition</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    
+    <style>
+      /* お歯黒の時と同じ高級感のあるUIデザイン */
+      #ui-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        z-index: 10000; display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        background: rgba(0,0,0,0.8); color: white; font-family: sans-serif;
+      }
+      #start-btn {
+        padding: 15px 30px; background: #c5a059; border: none; color: white;
+        font-size: 18px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      }
+    </style>
   </head>
-  <body>
-    <a-scene mindar-image="imageTargetSrc: ./seasonal_targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+  <body style="margin: 0; overflow: hidden;">
+
+    <div id="ui-overlay">
+      <p>展示：四季の移ろい</p>
+      <button id="start-btn">鑑賞を開始する</button>
+    </div>
+
+    <a-scene 
+      mindar-image="imageTargetSrc: ./seasonal_targets.mind; autoStart: false;" 
+      vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       
       <a-assets>
         <a-asset-item id="spring" src="./spring.glb"></a-asset-item>
@@ -17,21 +42,33 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model src="#spring" rotation="0 0 0" position="0 0 0" scale="0.1 0.1 0.1"></a-gltf-model>
+        <a-gltf-model src="#spring" position="0 0 0.1" scale="0.2 0.2 0.2"></a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model src="#summer" rotation="0 0 0" position="0 0 0" scale="0.1 0.1 0.1"></a-gltf-model>
+        <a-gltf-model src="#summer" position="0 0 0.1" scale="0.2 0.2 0.2"></a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 2">
-        <a-gltf-model src="#autumn" rotation="0 0 0" position="0 0 0" scale="0.1 0.1 0.1"></a-gltf-model>
+        <a-gltf-model src="#autumn" position="0 0 0.1" scale="0.2 0.2 0.2"></a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 3">
-        <a-gltf-model src="#winter" rotation="0 0 0" position="0 0 0" scale="0.1 0.1 0.1"></a-gltf-model>
+        <a-gltf-model src="#winter" position="0 0 0.1" scale="0.2 0.2 0.2"></a-gltf-model>
       </a-entity>
 
     </a-scene>
+
+    <script>
+      const overlay = document.getElementById('ui-overlay');
+      const btn = document.getElementById('start-btn');
+      const scene = document.querySelector('a-scene');
+
+      // ボタンを押した瞬間にカメラとARシステムを起動
+      btn.addEventListener('click', () => {
+        scene.systems['mindar-image-system'].start();
+        overlay.style.display = 'none';
+      });
+    </script>
   </body>
 </html>
